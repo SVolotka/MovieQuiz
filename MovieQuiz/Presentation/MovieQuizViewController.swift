@@ -3,12 +3,11 @@ import UIKit
 final class MovieQuizViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
-        questionTitleLabel.font = UIFont(name: "YS Dysplay-Medium", size: 20)
-        indexLabel.font = UIFont(name: "YS Dysplay-Medium", size: 20)
-        questionLabel.font = UIFont(name: "YS Dysplay-Bold", size: 23)
-        noButton.titleLabel?.font = UIFont(name: "YS Dysplay-Medium", size: 20)
-        yesButton.titleLabel?.font = UIFont(name: "YS Dysplay-Medium", size: 20)
-        
+        questionTitleLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
+        indexLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
+        questionLabel.font = UIFont(name: "YSDisplay-Bold", size: 23)
+        noButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
+        yesButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
         
         let currentQuestion = questions[currentQuestionIndex]
         let firstQuestion = convert(model: currentQuestion)
@@ -16,24 +15,12 @@ final class MovieQuizViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    
     @IBOutlet private weak var questionTitleLabel: UILabel!
     @IBOutlet private weak var indexLabel: UILabel!
     @IBOutlet private weak var posterView: UIImageView!
     @IBOutlet private weak var questionLabel: UILabel!
     @IBOutlet private weak var noButton: UIButton!
     @IBOutlet private weak var yesButton: UIButton!
-    
-    @IBAction private func noButtonClicked(_ sender: Any) {
-        let currentQuestion = questions[currentQuestionIndex]
-        let givenAnswer = false
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
-    }
-    @IBAction private func yesButtonClicked(_ sender: Any) {
-        let currentQuestion = questions[currentQuestionIndex]
-        let givenAnswer = true
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
-    }
     
     struct QuizQuestion {
         let image: String
@@ -46,6 +33,7 @@ final class MovieQuizViewController: UIViewController {
         let question: String
         let questionNumber: String
     }
+    
     struct QuizResultViewModel {
         let title: String
         let text: String
@@ -87,6 +75,17 @@ final class MovieQuizViewController: UIViewController {
     private var currentQuestionIndex: Int = 0
     private var correctAnswers: Int = 0
     
+    @IBAction private func noButtonClicked(_ sender: Any) {
+        let currentQuestion = questions[currentQuestionIndex]
+        let givenAnswer = false
+        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+    }
+    @IBAction private func yesButtonClicked(_ sender: Any) {
+        let currentQuestion = questions[currentQuestionIndex]
+        let givenAnswer = true
+        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+    }
+    
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         let questionStep = QuizStepViewModel(
             image: UIImage(named: model.image) ?? UIImage(),
@@ -94,12 +93,20 @@ final class MovieQuizViewController: UIViewController {
             questionNumber: "\(currentQuestionIndex + 1)/\(questions.count)")
         return questionStep
     }
+    
     private func show(quiz step: QuizStepViewModel) {
+        yesButton.isEnabled = true
+        noButton.isEnabled = true
+        
         posterView.image = step.image
         indexLabel.text = step.questionNumber
         questionLabel.text = step.question
     }
+    
     private func showAnswerResult(isCorrect: Bool) {
+        yesButton.isEnabled = false
+        noButton.isEnabled = false
+        
         posterView.layer.masksToBounds = true
         posterView.layer.borderWidth = 8
         posterView.layer.cornerRadius = 20
@@ -112,6 +119,7 @@ final class MovieQuizViewController: UIViewController {
             self.showNextQuestionOrResults()
         }
     }
+    
     private func showNextQuestionOrResults() {
         posterView.layer.borderWidth = 0
         if currentQuestionIndex == questions.count - 1 {
@@ -125,6 +133,7 @@ final class MovieQuizViewController: UIViewController {
             show(quiz: viewModel)
         }
     }
+    
     private func show(quiz result: QuizResultViewModel) {
         let alert = UIAlertController(
             title: result.title,
