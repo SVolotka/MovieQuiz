@@ -53,10 +53,14 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
             message: message,
             preferredStyle: .alert)
         
+        alert.view.accessibilityIdentifier = "Game results"
+        
+        
         let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
             guard let self = self else { return }
             self.presenter.restartGame()
         }
+        action.accessibilityIdentifier = "alertAction"
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
     }
@@ -89,7 +93,11 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
             message: message,
             preferredStyle: .alert)
         
-        let action = UIAlertAction(title: "Попробовать ещё раз",
+        
+        alert.view.accessibilityIdentifier = "Game results"
+        
+        
+        let action = UIAlertAction(title: "Попробовать еще раз",
                                    style: .default) { [weak self] _ in
             guard let self = self else { return }
             

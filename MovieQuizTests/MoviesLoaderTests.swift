@@ -62,13 +62,13 @@ struct StubNetworkClient: NetworkRouting {
     
     let emulateError: Bool
     
-    func fetch(url: URL, handler: @escaping (Result<Data, any Error>) -> Void) {
-        if emulateError {
-            handler(.failure(TestError.test))
-        } else {
-            handler(.success(expectedResponse))
-        }
-    }
+//    func fetch(url: URL, handler: @escaping (Result<Data, any Error>) -> Void) {
+//        if emulateError {
+//            handler(.failure(TestError.test))
+//        } else {
+//            handler(.success(expectedResponse))
+//        }
+//    }
     private var expectedResponse: Data {
                 """
                 {
@@ -101,6 +101,14 @@ struct StubNetworkClient: NetworkRouting {
                     ]
                   }
                 """.data(using: .utf8) ?? Data()
+    }
+    
+    func fetch(url: URL, handler: @escaping (Result<Data, any Error>) -> Void) {
+        if emulateError {
+            handler(.failure(TestError.test))
+        } else {
+            handler(.success(expectedResponse))
+        }
     }
 }
 
